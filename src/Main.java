@@ -26,8 +26,8 @@ void main() {
                                       _.'                   '-|      |
                                   _.-'                        |  []  |
                                  '--..._______________________|______|
-                                          (o)  (o)   (o)  (o)
-                                         /  \\\\ /  \\\\  /  \\\\ /  \\\\
+                                          (o)   (o)   (o)   (o)
+                                         /  \\\\ /  \\\\ /  \\\\ /  \\\\
                                         ''''''''''''''''''''''
                                  ┌────────────────────────────────────────────────────────┐
                                  │              ZONA AZUL - CIUDAD DE MARTOS              │
@@ -48,32 +48,75 @@ void main() {
                 IO.println("Opción no implementada todavía.");
                 break;
             case 3:
-                LocalDateTime ahora = LocalDateTime.now();
-                String diaSemana = String.valueOf(ahora.getDayOfWeek());
-                int dia = ahora.getDayOfMonth();
-                String mes = String.valueOf(ahora.getMonth());
-                int anio = ahora.getYear();
-                IO.println("\t - Fecha: %s - %d of %s of %d".formatted(diaSemana,dia,mes,anio));
-                int hora = ahora.getHour();
-                int minuto = ahora.getMinute();
-                int segundo = ahora.getSecond();
-                IO.println("\t - Hora actual: %d:%d:%d".formatted(hora,minuto,segundo));
-                IO.println("""
-        \t - Tarifas
-        
-        Duración      No residentes    Residentes
-        00:15:00      0,25 €           0,10 €
-        00:29:50      0,45 €           0,20 €
-        00:59:31      0,85 €           0,40 €
-        01:29:12      1,25 €           0,60 €
-        02:00:00      1,70 €           0,80 €
-        """);
-                IO.println("""
-        \t - Horario
-        
-        Lunes a viernes    09:00 - 14:00  y  17:00 - 21:00
-        Sábado             09:00 - 14:00
-        """);
+                do { //Creamos un menú para visualizar las distintas opciones
+                    option = Integer.parseInt(IO.readln("""
+  ┌──────────────────────────────────────────────────┐
+  │                  MENÚ CONSULTAS                  │
+  ├──────────────────────────────────────────────────┤
+  │   1. Fecha y hora actual                         │
+  │   2. Tarifas                                     │
+  │   3. Horarios                                    │
+  │   0. Volver al menu principal                    │
+  └──────────────────────────────────────────────────┘
+👉 Elija una opción:"""));
+                    switch (option) {
+                        case 1: //Mostrar fecha y hora actual
+                            //Variables para la muestra de datos de fecha y hora
+                            LocalDateTime ahora = LocalDateTime.now(); //registramos la fecha en el momento que pulsa esta opción del menú
+                            String diaSemana = String.valueOf(ahora.getDayOfWeek()); //Dia de la semana. Ahora mismo lo imprime en inglés.
+                            int dia = ahora.getDayOfMonth(); //Día del mes
+                            int mes = ahora.getMonthValue(); //Mes del año
+                            int anio = ahora.getYear(); //Año
+                            int hora = ahora.getHour(); //Hora
+                            int minuto = ahora.getMinute(); //Minuto
+                            int segundo = ahora.getSecond(); //Segundo
+                            // 1. Preparamos los textos con formato (añadiendo %02d para que los números menores de 10 tengan un 0 delante, ej: 09:05:02)
+                            // 1. Preparamos solo los datos (manteniendo los ceros a la izquierda para el formato)
+                            String valorFecha = "%s - %02d/%02d/%d".formatted(diaSemana, dia, mes, anio);
+                            String valorHora = "%02d:%02d:%02d".formatted(hora, minuto, segundo);
+                            // 2. Imprimimos la tabla:
+                            IO.println("""
+      ┌──────────────────────────────────────────────────┐
+      │               FECHA Y HORA ACTUAL                │
+      ├──────────┬───────────────────────────────────────┤
+      │ Fecha    │ %-37s │
+      │ Hora     │ %-37s │
+      └──────────┴───────────────────────────────────────┘
+    """.formatted(valorFecha, valorHora));
+
+                            break;
+                        case 2: //Mostrar tarifa
+                            IO.println("""
+      ┌───────────────────────────────────────────────┐
+      │               TARIFAS ZONA AZUL               │
+      ├────────────────┬─────────────────┬────────────┤
+      │    Duración    │  No residentes  │ Residentes │
+      ├────────────────┼─────────────────┼────────────┤
+      │    00:15:00    │      0,25 €     │   0,10 €   │
+      │    00:29:50    │      0,45 €     │   0,20 €   │
+      │    00:59:31    │      0,85 €     │   0,40 €   │
+      │    01:29:12    │      1,25 €     │   0,60 €   │
+      │    02:00:00    │      1,70 €     │   0,80 €   │
+      └────────────────┴─────────────────┴────────────┘
+    """);
+                            break;
+                        case 3: //Mostrar horarios
+                            IO.println("""
+      ┌──────────────────────────────────────────────────┐
+      │                HORARIO ZONA AZUL                 │
+      ├──────────────────┬───────────────────────────────┤
+      │ Lunes a viernes  │ 09:00 - 14:00 y 17:00 - 21:00 │
+      │ Sábado           │ 09:00 - 14:00                 │
+      └──────────────────┴───────────────────────────────┘
+    """);
+                            break;
+                        case 0: //Volver al menú principal
+                           break;
+                        default:
+                            IO.println("Opción introducido no valida.");
+                    }
+                } while (option !=0);
+
                 break;
             case 4:
                 //Variables para el login del menú Administrador
