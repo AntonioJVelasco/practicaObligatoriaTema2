@@ -1,4 +1,5 @@
 //importamos herramientas para trabajar con fecha y hora.
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -14,30 +15,29 @@ void main() {
     //Portada de nuestro menú
 
 
-
     int option;
     boolean salidaMenu;
     do {
         option = Integer.parseInt(IO.readln("""
-                                             /\\\\_.-'''-._
-                                           _/           \\\\_
-                                          /               \\\\  +------+
-                                         / CIUDAD DE MARTOS\\\\ |  []  |
-                                      _.'                   '-|      |
-                                  _.-'                        |  []  |
-                                 '--..._______________________|______|
-                                          (o)   (o)   (o)   (o)
-                                         /  \\\\ /  \\\\ /  \\\\ /  \\\\
-                                        ''''''''''''''''''''''
-                                 ┌────────────────────────────────────────────────────────┐
-                                 │              ZONA AZUL - CIUDAD DE MARTOS              │
-                                 ├────────────────────────────────────────────────────────┤
-                                 │  1. Obtener un ticket                                  │
-                                 │  2. Anular una multa                                   │
-                                 │  3. Consultar fecha y hora actual, tarifas y horarios  │
-                                 │  4. Menú administrador                                 │
-                                 └────────────────────────────────────────────────────────┘
-                               👉 Elija una opción:"""));//Estructura de nuestro menú
+                              /\\\\_.-'''-._
+                            _/           \\\\_
+                           /               \\\\  +------+
+                          / CIUDAD DE MARTOS\\\\ |  []  |
+                       _.'                   '-|      |
+                   _.-'                        |  []  |
+                  '--..._______________________|______|
+                           (o)   (o)   (o)   (o)
+                          /  \\\\ /  \\\\ /  \\\\ /  \\\\
+                         ''''''''''''''''''''''
+                  ┌────────────────────────────────────────────────────────┐
+                  │              ZONA AZUL - CIUDAD DE MARTOS              │
+                  ├────────────────────────────────────────────────────────┤
+                  │  1. Obtener un ticket                                  │
+                  │  2. Anular una multa                                   │
+                  │  3. Consultar fecha y hora actual, tarifas y horarios  │
+                  │  4. Menú administrador                                 │
+                  └────────────────────────────────────────────────────────┘
+                👉 Elija una opción:"""));//Estructura de nuestro menú
         salidaMenu = false;
         switch (option) {
 
@@ -50,15 +50,15 @@ void main() {
             case 3:
                 do { //Creamos un menú para visualizar las distintas opciones
                     option = Integer.parseInt(IO.readln("""
-  ┌──────────────────────────────────────────────────┐
-  │                  MENÚ CONSULTAS                  │
-  ├──────────────────────────────────────────────────┤
-  │   1. Fecha y hora actual                         │
-  │   2. Tarifas                                     │
-  │   3. Horarios                                    │
-  │   0. Volver al menu principal                    │
-  └──────────────────────────────────────────────────┘
-👉 Elija una opción:"""));
+                              ┌──────────────────────────────────────────────────┐
+                              │                  MENÚ CONSULTAS                  │
+                              ├──────────────────────────────────────────────────┤
+                              │   1. Fecha y hora actual                         │
+                              │   2. Tarifas                                     │
+                              │   3. Horarios                                    │
+                              │   0. Volver al menu principal                    │
+                              └──────────────────────────────────────────────────┘
+                            👉 Elija una opción:"""));
                     switch (option) {
                         case 1: //Mostrar fecha y hora actual
                             //Variables para la muestra de datos de fecha y hora
@@ -76,99 +76,96 @@ void main() {
                             String valorHora = "%02d:%02d:%02d".formatted(hora, minuto, segundo);
                             // 2. Imprimimos la tabla:
                             IO.println("""
-      ┌──────────────────────────────────────────────────┐
-      │               FECHA Y HORA ACTUAL                │
-      ├──────────┬───────────────────────────────────────┤
-      │ Fecha    │ %-37s │
-      │ Hora     │ %-37s │
-      └──────────┴───────────────────────────────────────┘
-    """.formatted(valorFecha, valorHora));
+                                      ┌──────────────────────────────────────────────────┐
+                                      │               FECHA Y HORA ACTUAL                │
+                                      ├──────────┬───────────────────────────────────────┤
+                                      │ Fecha    │ %-37s │
+                                      │ Hora     │ %-37s │
+                                      └──────────┴───────────────────────────────────────┘
+                                    """.formatted(valorFecha, valorHora));
 
                             break;
                         case 2: //Mostrar tarifa
                             IO.println("""
-      ┌───────────────────────────────────────────────┐
-      │               TARIFAS ZONA AZUL               │
-      ├────────────────┬─────────────────┬────────────┤
-      │    Duración    │  No residentes  │ Residentes │
-      ├────────────────┼─────────────────┼────────────┤
-      │    00:15:00    │      0,25 €     │   0,10 €   │
-      │    00:29:50    │      0,45 €     │   0,20 €   │
-      │    00:59:31    │      0,85 €     │   0,40 €   │
-      │    01:29:12    │      1,25 €     │   0,60 €   │
-      │    02:00:00    │      1,70 €     │   0,80 €   │
-      └────────────────┴─────────────────┴────────────┘
-    """);
+                                      ┌───────────────────────────────────────────────┐
+                                      │               TARIFAS ZONA AZUL               │
+                                      ├────────────────┬─────────────────┬────────────┤
+                                      │    Duración    │  No residentes  │ Residentes │
+                                      ├────────────────┼─────────────────┼────────────┤
+                                      │    00:15:00    │      0,25 €     │   0,10 €   │
+                                      │    00:29:50    │      0,45 €     │   0,20 €   │
+                                      │    00:59:31    │      0,85 €     │   0,40 €   │
+                                      │    01:29:12    │      1,25 €     │   0,60 €   │
+                                      │    02:00:00    │      1,70 €     │   0,80 €   │
+                                      └────────────────┴─────────────────┴────────────┘
+                                    """);
                             break;
                         case 3: //Mostrar horarios
                             IO.println("""
-      ┌──────────────────────────────────────────────────┐
-      │                HORARIO ZONA AZUL                 │
-      ├──────────────────┬───────────────────────────────┤
-      │ Lunes a viernes  │ 09:00 - 14:00 y 17:00 - 21:00 │
-      │ Sábado           │ 09:00 - 14:00                 │
-      └──────────────────┴───────────────────────────────┘
-    """);
+                                      ┌──────────────────────────────────────────────────┐
+                                      │                HORARIO ZONA AZUL                 │
+                                      ├──────────────────┬───────────────────────────────┤
+                                      │ Lunes a viernes  │ 09:00 - 14:00 y 17:00 - 21:00 │
+                                      │ Sábado           │ 09:00 - 14:00                 │
+                                      └──────────────────┴───────────────────────────────┘
+                                    """);
                             break;
                         case 0: //Volver al menú principal
-                           break;
+                            break;
                         default:
                             IO.println("Opción introducido no valida.");
                     }
-                } while (option !=0);
+                } while (option != 0);
 
                 break;
             case 4:
                 //Variables para el login del menú Administrador
-                String usuario = "Paco";
-                int contrasenia = 1234, contador = 0;
+                String usuario = "Root";
+                int contrasenia = 1234;
                 boolean loggin = false;
 
                 //Validación del usuario y contraseña.
 
-                while (contador < 3 && !loggin){ // Salida del menú o cuando el usuario supere los intentos o porque el usuario mete los datos correctamente.
+                while (!loggin) { // Salida del menú o cuando el usuario supere los intentos o porque el usuario mete los datos correctamente.
                     String usuarioCliente = IO.readln("Introduce tu Usuario: ");
                     int contraseniaCliente = Integer.parseInt(IO.readln("Introduce tu contraseña: "));
-                    if(contrasenia == contraseniaCliente && usuario.equalsIgnoreCase(usuarioCliente)){ // Aquí validamos que los dos datos introducidos sean los mismos que los que tenemos almacenados
-                        IO.println(" Acceso correcto");
+                    if (contrasenia == contraseniaCliente && usuario.equalsIgnoreCase(usuarioCliente)) { // Aquí validamos que los dos datos introducidos sean los mismos que los que tenemos almacenados
+                        IO.println("Acceso correcto");
                         loggin = true;//Salida de nuestro bucle por loguearse.
-                    }else{
-                        contador++;//Sumamos un fallo si introduce un dato erróneo.
-                        IO.println("Usuario o contraseña no valida. Te quedan: " + (3 - contador) + " intentos");
+                    } else {
+
+                        IO.println("Usuario o contraseña no valida.");
 
                     }
-                    if(contador == 3){
-                        IO.println("""
-                                Numero de Intentos máximos permitidos.
-                                Acceso bloqueado.
-                                """);
-                        return; //Salida del flujo del menú principal. //Preguntarle si esta opción es viable y si cuando se bloquea el usuario se cierra la app o volvemos al flujo del menú principal.
+                }
+                int opcionAdministrador = 0;
+                do {
+                    opcionAdministrador = Integer.parseInt(IO.readln("""
+                            ┌──────────────────────────────────────────────┐
+                            │           MENÚ DE ADMINISTRADOR              │
+                            ├──────────────────────────────────────────────┤
+                            │  1. Dinero ingresado en tickets y generados  │
+                            │  2. Dinero por multas y multas anuladas      │
+                            │  3. Apagar el software.                      │ 
+                            │  4. Volver al menú Inicial.                  │
+                            └──────────────────────────────────────────────┘
+                            👉 Elige una opción:
+                            """));
+                    switch (opcionAdministrador) {
+                        case 1:
+                            IO.println("Opción no implementada");
+                            break;
+                        case 2:
+                            IO.println("Opción no implementada");
+                            break;
+                        case 3:
+                            IO.println("""
+                                    Saliendo de la aplicación.
+                                    ¡¡¡Vuelva pronto!!!
+                                    """);
+                            salidaMenu = true;
                     }
-                }
-                int opcionAdministrador = Integer.parseInt(IO.readln("""
-        ┌──────────────────────────────────────────────┐
-        │           MENÚ DE ADMINISTRADOR              │
-        ├──────────────────────────────────────────────┤
-        │  1. Dinero ingresado en tickets y generados  │
-        │  2. Dinero por multas y multas anuladas      │
-        │  3. Apagar el software                       │
-        └──────────────────────────────────────────────┘
-        👉 Elige una opción:
-        """));
-                switch (opcionAdministrador){
-                    case 1:
-                        IO.println("Opción no implementada");
-                        break;
-                    case 2:
-                        IO.println("Opción no implementada");
-                        break;
-                    case 3:
-                        IO.println("""
-                                Saliendo de la aplicación.
-                                ¡¡¡Vuelva pronto!!!
-                                """);
-                        salidaMenu = true;
-                }
+                } while (opcionAdministrador != 4 && opcionAdministrador != 3);
                 break;
             default:
                 IO.println("Opción introducido no valida.");
