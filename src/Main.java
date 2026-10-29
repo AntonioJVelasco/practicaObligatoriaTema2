@@ -45,11 +45,67 @@ void main() {
                 IO.println("Opción no implementada todavía");
                 break;
             case 2:
-                IO.println("Opción no implementada todavía.");
+
+                int opcionMultas; //Variable para las opciones del menu multas
+                String ticketMulta; // numero de ticket a comprobar si es valido.
+                String ticketAnulado; // numero de ticket generado al anular la multa.
+                boolean ticketValido; // ticket válido o no.
+                int cantidadMultas = 0;
+                double recaudacionMultas = 0; //Podria ser entero para esta práctica. Pero en un futuro si cambian los precios, podriamos necesitar un double.
+
+                do {
+                    opcionMultas = Integer.parseInt(IO.readln("""
+                              ┌──────────────────────────────────────────────────┐
+                              │                  ANULAR MULTA                    │
+                              ├──────────────────────────────────────────────────┤
+                              │   1. Por exceder el tiempo permitido             │
+                              │   2. Por carecer de ticket                       │
+                              │   0. Volver al menu principal                    │
+                              └──────────────────────────────────────────────────┘
+                            👉 Elija una opción:"""));
+                    switch (opcionMultas) {
+                        case 1: //Anular multa por exceso de tiempo permitido
+                            ticketMulta = IO.readln("Introduce el número del ticket: ");
+
+                            //Comprobamos si es valido
+                            if (ticketMulta.equals("1234")) //TODO aquí deberemos comprobar un código
+                                ticketValido = true;
+                            else
+                                ticketValido = false;
+
+                            //Anulamos la multa y generamos ticket de anulación si es valido el ticket.
+                            if (ticketValido) {
+                                IO.readln("Ticket correcto. Ingrese 3 € y pulse -Enter- para continuar.");
+                                ticketAnulado = "4321AA"; //TODO aquí deberemos generar un código
+                                IO.println("Tu ticket de anulación es: %s".formatted(ticketAnulado));
+                                cantidadMultas++;
+                                recaudacionMultas +=3;
+                                IO.println("""
+                                        \nCantidad multas: %d
+                                        Recaudacion total: %.2f
+                                        """.formatted(cantidadMultas,recaudacionMultas));
+                            }
+                            else
+                                IO.println("%s no es un ticket válido. No se ha anulado ninguna multa.".formatted(ticketMulta));
+
+                            break;
+                        case 2: //Anular multa por carecer de ticket
+                            IO.println("Has seleccionado anular multa por carecer de ticket");
+                            break;
+                        case 0: //Volver al menu principal
+                            break;
+                        default:
+                            IO.println("Opción introducido no valida.");
+                            break;
+                    }
+                } while (opcionMultas != 0);
+
                 break;
             case 3:
+
+                int opcionConsultas; //Variable para las opciones del menu consultas.
                 do { //Creamos un menú para visualizar las distintas opciones
-                    option = Integer.parseInt(IO.readln("""
+                    opcionConsultas = Integer.parseInt(IO.readln("""
                               ┌──────────────────────────────────────────────────┐
                               │                  MENÚ CONSULTAS                  │
                               ├──────────────────────────────────────────────────┤
@@ -59,7 +115,7 @@ void main() {
                               │   0. Volver al menu principal                    │
                               └──────────────────────────────────────────────────┘
                             👉 Elija una opción:"""));
-                    switch (option) {
+                    switch (opcionConsultas) {
                         case 1: //Mostrar fecha y hora actual
                             //Variables para la muestra de datos de fecha y hora
                             LocalDateTime ahora = LocalDateTime.now(); //registramos la fecha en el momento que pulsa esta opción del menú
@@ -115,7 +171,7 @@ void main() {
                         default:
                             IO.println("Opción introducido no valida.");
                     }
-                } while (option != 0);
+                } while (opcionConsultas != 0);
 
                 break;
             case 4:
@@ -146,11 +202,10 @@ void main() {
                             ├──────────────────────────────────────────────┤
                             │  1. Dinero ingresado en tickets y generados  │
                             │  2. Dinero por multas y multas anuladas      │
-                            │  3. Apagar el software.                      │ 
+                            │  3. Apagar el software.                      │
                             │  4. Volver al menú Inicial.                  │
                             └──────────────────────────────────────────────┘
-                            👉 Elige una opción:
-                            """));
+                            👉 Elige una opción:"""));
                     switch (opcionAdministrador) {
                         case 1:
                             IO.println("Opción no implementada");
