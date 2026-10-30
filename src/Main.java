@@ -41,7 +41,7 @@ void main() {
         salidaMenu = false;
         switch (option) {
 
-            case 1: //Opción de obtener el ticket
+            case 1://Opción de obtener el ticket
                 IO.println("Opción no implementada todavía");
                 break;
             case 2:
