@@ -16,7 +16,7 @@ void main() {
 
     // Variables de nuestro programa.
     int option, diaSimulacion, mesSimulacion, anioSimulacion, horaSimulacion, minutosSimulacion;
-    double dineroUsuario = 0, importeFinal = 0;
+    double dineroUsuario = 0, importeFinal = 0, horasTramo = 0, minutosTramo = 0, segundosTramo = 0;
     //Tarifa de precios para los residentes
     final double PRECIO_PRIMER_TRAMO_RESIDENTE = 0.10, PRECIO_SEGUNDO_TRAMO_RESIDENTE = 0.20;
     final double PRECIO_TERCER_TRAMO_RESIDENTE = 0.40, PRECIO_CUARTO_TRAMO_RESIDENTE = 0.60;
@@ -30,11 +30,12 @@ void main() {
 
     // Tramos horarios.
 
-    final int MINUTOS_PRIMER_TRAMO = 15, MINUTOS_SEGUNDO_TRAMO = 29, MINUTOS_TERCER_TRAMO = 59;
-    final int MINUTOS_CUARTO_TRAMO = 29;
-    final int SEGUNDOS_SEGUNDO_TRAMO = 50, SEGUNDOS_TERCER_TRAMO = 31, SEGUNDOS_CUARTO_TRAMO = 12;
-    final int HORA_CUARTO_TRAMO = 1, HORA_QUINTO_TRAMO = 2;
-    boolean salidaMenu, datoValido, dineroValido;
+    final int HORAS_PRIMER_TRAMO = 0, MINUTOS_PRIMER_TRAMO = 15, SEGUNDOS_PRIMER_TRAMO = 0;
+    final int HORAS_SEGUNDO_TRAMO = 0, MINUTOS_SEGUNDO_TRAMO = 29, SEGUNDOS_SEGUNDO_TRAMO = 50;
+    final int HORAS_TERCER_TRAMO = 0, MINUTOS_TERCER_TRAMO = 59, SEGUNDOS_TERCER_TRAMO = 31;
+    final int HORAS_CUARTO_TRAMO = 1, MINUTOS_CUARTO_TRAMO = 29, SEGUNDOS_CUARTO_TRAMO = 12;
+    final int HORAS_QUINTO_TRAMO = 2, MINUTOS_QUINTO_TRAMO = 0, SEGUNDOS_QUINTO_TRAMO = 0;
+    boolean salidaMenu, datoValido, dineroValido, residente, fechaValida = false;
     String datosUsuario, respuestaSimulacion;
     do {
         option = Integer.parseInt(IO.readln("""
@@ -61,17 +62,18 @@ void main() {
         switch (option) {
 
             case 1://Opción de obtener el ticket
-                LocalDateTime horaActual = LocalDateTime.now();
-                LocalDateTime horaSalida = LocalDateTime.now();
-                LocalDateTime fechaSimulada  = LocalDateTime.now();
-                DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                String fechaTexto = horaActual.format(fechaFormateada);
+                LocalDateTime fechaActual = LocalDateTime.now();
+                LocalDateTime fechaSalida = LocalDateTime.now();
+                LocalDateTime fechaSimulada;
+                LocalDateTime horaLimite;
                 datoValido = false;
                 dineroValido = false;
+                residente = false;
                 do {
                     // Bloque para validar que el usuario es residente o no.
                     datosUsuario = IO.readln("¿Es usted residente? (S/N): ");
                     if (datosUsuario.equalsIgnoreCase("si")) {
+                        residente = true;
                         datoValido = true;
                     } else if (datosUsuario.equalsIgnoreCase("no")) {
                         datoValido = true;
@@ -79,7 +81,6 @@ void main() {
                         IO.println("Opción invalida");
                     }
                 } while (!datoValido);
-
                 //Bloque para validar que el dinero introducido es el correcto.
 
                 do {
@@ -88,7 +89,7 @@ void main() {
                             Máximo 2 euros.
                             Mínimo 0.10 (Si eres residente), 0.25 (si no eres residente)
                             """));
-                    if (datosUsuario.equalsIgnoreCase("no")) {
+                    if (!residente) {
                         /*
                         Controlamos que los no residentes no metan menos de 0.25 y que no pueda meter la tarifa más
                         baja de los residentes y vicerversa.
@@ -99,7 +100,7 @@ void main() {
                         } else {
                             dineroValido = true;
                         }
-                    } else if (datosUsuario.equalsIgnoreCase("Si")) {
+                    } else {
                         //Controlamos que los residentes no puedan meter menos del mínimo de su categoría.
                         if (dineroUsuario > 2 || dineroUsuario < 0.10) {
                             IO.println("Error al introducir el importe.");
@@ -110,45 +111,72 @@ void main() {
                 }
                 while (!dineroValido);
 
-                //A continuación vamos asignar los tramos según el importe introducido
+                //A continuación vamos a asignar los tramos según el importe introducido
 
                 //Tarifas para los residentes.
+                int tramo = 0;
 
-
-                if (datosUsuario.equalsIgnoreCase("si")) {
+                if (residente) {
                     if (dineroUsuario >= PRECIO_PRIMER_TRAMO_RESIDENTE && dineroUsuario < PRECIO_SEGUNDO_TRAMO_RESIDENTE) {
                         //Añadimos con la función .plus los tramos que corresponda al importe introducido.
-                        horaSalida = horaActual.plusMinutes(MINUTOS_PRIMER_TRAMO);
-
+                        tramo = 1;
                     } else if (dineroUsuario >= PRECIO_SEGUNDO_TRAMO_RESIDENTE && dineroUsuario < PRECIO_TERCER_TRAMO_RESIDENTE) {
-                        horaSalida = horaActual.plusMinutes(MINUTOS_SEGUNDO_TRAMO).plusSeconds(SEGUNDOS_SEGUNDO_TRAMO);
+                        tramo = 2;
                     } else if (dineroUsuario >= PRECIO_TERCER_TRAMO_RESIDENTE && dineroUsuario < PRECIO_CUARTO_TRAMO_RESIDENTE) {
-                        horaSalida = horaActual.plusMinutes(MINUTOS_TERCER_TRAMO).plusSeconds(SEGUNDOS_TERCER_TRAMO);
+                        tramo = 3;
                     } else if (dineroUsuario >= PRECIO_CUARTO_TRAMO_RESIDENTE && dineroUsuario < PRECIO_QUINTO_TRAMO_RESIDENTE) {
-                        horaSalida = horaActual.plusHours(HORA_CUARTO_TRAMO).plusMinutes(MINUTOS_CUARTO_TRAMO).plusSeconds(SEGUNDOS_CUARTO_TRAMO);
+                        tramo = 4;
                     } else {
                         // Cuando llegamos aquí es que el importe es superior al tramo máximo y le damos la máxima
                         //Duración  en el parking
-                        horaSalida = horaActual.plusHours(HORA_QUINTO_TRAMO);
-
+                        tramo = 5;
                     }
                 } else {
                     //Tarifas para NO residentes.
                     if (dineroUsuario >= PRECIO_PRIMER_TRAMO_NO_RESIDENTE && dineroUsuario < PRECIO_SEGUNDO_TRAMO_NO_RESIDENTE) {
-                        horaSalida = horaActual.plusMinutes(MINUTOS_PRIMER_TRAMO);
-
+                        tramo = 1;
                     } else if (dineroUsuario >= PRECIO_SEGUNDO_TRAMO_NO_RESIDENTE && dineroUsuario < PRECIO_TERCER_TRAMO_NO_RESIDENTE) {
-                        horaSalida = horaActual.plusMinutes(MINUTOS_SEGUNDO_TRAMO).plusSeconds(SEGUNDOS_SEGUNDO_TRAMO);
+                        tramo = 2;
                     } else if (dineroUsuario >= PRECIO_TERCER_TRAMO_NO_RESIDENTE && dineroUsuario < PRECIO_CUARTO_TRAMO_NO_RESIDENTE) {
-                        horaSalida = horaActual.plusMinutes(MINUTOS_TERCER_TRAMO).plusSeconds(SEGUNDOS_TERCER_TRAMO);
+                        tramo = 3;
                     } else if (dineroUsuario >= PRECIO_CUARTO_TRAMO_NO_RESIDENTE && dineroUsuario < PRECIO_QUINTO_TRAMO_NO_RESIDENTE) {
-                        horaSalida = horaActual.plusHours(HORA_CUARTO_TRAMO).plusMinutes(MINUTOS_CUARTO_TRAMO).plusSeconds(SEGUNDOS_CUARTO_TRAMO);
+                        tramo = 4;
                     } else {
-                        horaSalida = horaActual.plusHours(HORA_QUINTO_TRAMO);
-
+                        tramo = 5;
                     }
                 }
+                //todo asignar los valores de los tramos a las nuevas Variables.
+                // Una vez que conocemos el tramo unificamos las variables de horas minutos segundos.
+                switch (tramo) {
+                    case 1:
+                        horasTramo = HORAS_PRIMER_TRAMO;
+                        minutosTramo = MINUTOS_PRIMER_TRAMO;
+                        segundosTramo = SEGUNDOS_PRIMER_TRAMO;
+                        break;
 
+                    case 2:
+                        horasTramo = HORAS_SEGUNDO_TRAMO;
+                        minutosTramo = MINUTOS_SEGUNDO_TRAMO;
+                        segundosTramo = SEGUNDOS_SEGUNDO_TRAMO;
+
+                        break;
+                    case 3:
+                        horasTramo = HORAS_TERCER_TRAMO;
+                        minutosTramo = MINUTOS_TERCER_TRAMO;
+                        segundosTramo = SEGUNDOS_TERCER_TRAMO;
+                        break;
+                    case 4:
+                        horasTramo = HORAS_CUARTO_TRAMO;
+                        minutosTramo = MINUTOS_CUARTO_TRAMO;
+                        segundosTramo = SEGUNDOS_CUARTO_TRAMO;
+                        break;
+                    case 5:
+                        horasTramo = HORAS_QUINTO_TRAMO;
+                        minutosTramo = MINUTOS_QUINTO_TRAMO;
+                        segundosTramo = SEGUNDOS_QUINTO_TRAMO;
+                        break;
+
+                }
                 //Preguntamos al usuario si quiere simular una fecha o no.
                 do {
                     respuestaSimulacion = IO.readln("Quieres simular una fecha?: ");
@@ -161,22 +189,163 @@ void main() {
                         minutosSimulacion = Integer.parseInt(IO.readln("Introduce los minutos: "));
                         try {
                             fechaSimulada = LocalDateTime.of(anioSimulacion, mesSimulacion, diaSimulacion, horaSimulacion, minutosSimulacion);
-
+                            fechaActual = fechaSimulada;
+                            fechaValida = true;
                         } catch (DateTimeException e) {
                             IO.println("Error de validación " + e.getMessage());
+                            fechaValida = false;
                         }
-
-                        //TODO Hacer las comprobaciones cuando el usuario quiera sacar un ticket en los tramos no permitidos.
-
                     } else if (respuestaSimulacion.equalsIgnoreCase("no")) {
-                        IO.println("NO");
+                        fechaActual = LocalDateTime.now();
                     } else {
                         IO.println("Opción no valida.");
                     }
                 } while (!respuestaSimulacion.equalsIgnoreCase("si") && !respuestaSimulacion.equalsIgnoreCase("no"));
 
-                    // Esto es un tickect orientativo falta actualizar los datos  cuando hay que hacer cambio de días.
-                IO.println("""
+                //Trabajamos solamente con la fecha del usuario, teniendo en cuenta de si es simulación o no.
+
+                switch (fechaActual.getDayOfWeek()) {
+                    case DayOfWeek.MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY:
+                        //Tramo de menos de las 9 de la mañana.
+                        if (fechaActual.getHour() < 9) {
+                            fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
+                            fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                            IO.println("Fecha Salida: " + fechaSalida);
+
+                        }
+                        //Tramo desde las 9 hasta las 2.
+                        if (fechaActual.getHour() >= 9 && fechaActual.getHour() < 14) {
+                            fechaSalida = fechaActual;
+                            horaLimite = fechaActual.withHour(14).withMinute(0).withSecond(0);
+                            Duration horasQuedan = Duration.between(fechaActual, horaLimite);
+                            Duration duracionTotal = Duration.ofHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                            if (horasQuedan.compareTo(duracionTotal) > 0) {
+                                fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                            } else {
+                                //Lógica para controlar el tiempo de parking en las zonas de desborde.
+                                //Primero calculamos el tiempo consumido hasta la hora de cierre.
+                                Duration tiempoConsumido = Duration.between(fechaActual, horaLimite);
+                                //Duración de tu ticket.
+
+                                // Diferencia entre el tiempo consumido y el tiempo total de tu ticket
+                                Duration tiempoRestante = duracionTotal.minus(tiempoConsumido);
+                                //Reseteamos la fecha de salida a las 17:00
+                                fechaSalida = fechaActual.withHour(17).withMinute(0).withSecond(0);
+                                //Le añadimos el tiempo restante.
+                                fechaSalida = fechaSalida.plus(tiempoRestante);
+
+
+                            }
+                        }
+                        //Tramo desde las 14 hasta las 17
+
+                        if (fechaActual.getHour() >= 14 && fechaActual.getHour() < 17) {
+                            //Reseteamos el reloj a las 17:00
+                            fechaSalida = fechaActual.withHour(17).withMinute(0).withSecond(0);
+                            //Le sumamos la duración de nuestro ticket
+                            fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                        }
+
+                        //Tramo Desde las 17 a 21:00
+
+                        if (fechaActual.getHour() >= 17 && fechaActual.getHour() < 21) {
+                            fechaSalida = fechaActual;
+                            horaLimite = fechaActual.withHour(21).withMinute(0).withSecond(0);
+                            Duration horasQuedan = Duration.between(fechaActual, horaLimite);
+                            Duration duracionTotal = Duration.ofHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                            if (horasQuedan.compareTo(duracionTotal) > 0) {
+                                fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                            } else {
+                                //Lógica para controlar el tiempo de parking en las zonas de desborde.
+                                //Primero calculamos el tiempo consumido hasta la hora de cierre.
+                                Duration tiempoConsumido = Duration.between(fechaActual, horaLimite);
+                                //Duración de tu ticket.
+
+                                // Diferencia entre el tiempo consumido y el tiempo total de tu ticket
+                                Duration tiempoRestante = duracionTotal.minus(tiempoConsumido);
+                                //Reseteamos la fecha de salida a las 17:00
+                                fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
+                                fechaSalida = fechaSalida.plusDays(1);
+
+                                //Le añadimos el tiempo restante.
+                                fechaSalida = fechaSalida.plus(tiempoRestante);
+
+
+                            }
+                        }
+                        //Tramo 21 hacia adelante.
+
+                        if (fechaActual.getHour() >= 21) {
+                            fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
+                            fechaSalida = fechaSalida.plusDays(1);
+
+                            fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                        }
+
+
+                        break;
+                    case DayOfWeek.SATURDAY: {
+                        //Tramo antes de las 9
+                        if (fechaActual.getHour() < 9) {
+                            fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
+                            fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                        }
+                        //Tramo desde las 9 hasta las 2.
+                        if (fechaActual.getHour() >= 9 && fechaActual.getHour() < 14) {
+                            fechaSalida = fechaActual;
+                            horaLimite = fechaActual.withHour(14).withMinute(0).withSecond(0);
+                            Duration horasQuedan = Duration.between(fechaActual, horaLimite);
+                            Duration duracionTotal = Duration.ofHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                            if (horasQuedan.compareTo(duracionTotal) > 0) {
+                                fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                            } else {
+                                //Lógica para controlar el tiempo de parking en las zonas de desborde.
+                                //Primero calculamos el tiempo consumido hasta la hora de cierre.
+                                Duration tiempoConsumido = Duration.between(fechaActual, horaLimite);
+                                //Duración de tu ticket.
+
+                                // Diferencia entre el tiempo consumido y el tiempo total de tu ticket
+                                Duration tiempoRestante = duracionTotal.minus(tiempoConsumido);
+                                //Reseteamos la fecha de salida a las 17:00
+                                fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
+                                fechaSalida = fechaSalida.plusDays(2);
+                                //Le añadimos el tiempo restante.
+                                fechaSalida = fechaSalida.plus(tiempoRestante);
+
+
+                            }
+
+                        }
+                        //Tramo desde las 2 hacia adelante.
+                        if (fechaActual.getHour() >= 14) {
+                            fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
+                            fechaSalida = fechaSalida.plusDays(2);
+
+                            fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                        }
+
+                    }
+                        break;
+                    case DayOfWeek.SUNDAY: {
+                        //Para los domingos
+                        fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
+                        fechaSalida = fechaSalida.plusDays(1);
+
+                        fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
+                        break;
+                    }
+                }
+                //Generamos un código.
+
+
+
+                DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String fechaTextoEmitido = fechaActual.format(fechaFormateada);
+                String fechaTextoVencimiento = fechaSalida.format(fechaFormateada);
+                //TODO crear una variable booleana para imprimir SOLO una fecha valida.
+                // Esto es un tickect orientativo falta actualizar los datos  cuando hay que hacer cambio de días.
+                if(fechaValida){
+                    IO.println("""
                         ╔════════════════════════════════════════╗
                         ║        ZONA AZUL CIUDAD DE MARTOS      ║
                         ║                PARKING                 ║
@@ -192,7 +361,9 @@ void main() {
                         ╠════════════════════════════════════════╣
                         ║ Control Autenticidad: OK               ║
                         ╚════════════════════════════════════════╝
-                        """.formatted(fechaTexto, horaActual, horaSalida, fechaTexto, dineroUsuario));
+                        """.formatted(fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario));
+                }
+
 
 
                 break;
@@ -376,5 +547,6 @@ void main() {
             default:
                 IO.println("Opción introducido no valida.");
         }
-    } while (!salidaMenu);
+    }
+    while (!salidaMenu);
 }
