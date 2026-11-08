@@ -499,11 +499,11 @@ void main() {
                                 IO.println("El ticket correcto. ");
                                 do {
                                     importeMulta = Integer.parseInt(IO.readln("Ingrese 3 € para anular la multa: "));
-                                    if (importeMulta < 3) {
+                                    if (importeMulta != 3) {
                                         IO.println("Importe insuficiente.");
                                     }
 
-                                } while (importeMulta < 3);
+                                } while (importeMulta != 3);
 
                                 ticketAnulado = "4321AA"; //TODO aquí deberemos generar un código    1392A2
                                 numeroMulta++;
@@ -522,11 +522,11 @@ void main() {
 
                             do {
                                 importeMulta = Integer.parseInt(IO.readln("Ingrese 6 € para anular la multa: "));
-                                if (importeMulta < 6) {
-                                    IO.println("Importe insuficiente.");
+                                if (importeMulta != 6) {
+                                    IO.println("Importe Erroneo.");
                                 }
 
-                            } while (importeMulta < 6);
+                            } while (importeMulta != 6);
                             ticketAnulado = "4321BB"; //TODO aquí deberemos generar un código    1392A2
                             numeroMulta++;
                             recaudacionMultas += 6;
@@ -732,7 +732,16 @@ void main() {
                                 IO.println();
                             }
 
-                            IO.println("Opción no implementada");
+
+
+                            IO.println("""
+                            ┌──────────────────────────────────────────────┐
+                            │               INFORME TICKET.                │
+                            ├──────────────────────────────────────────────┤
+                            │  Recaudación Total: %.2f €                   │
+                            │  Número de tickets generados: %d              │
+                            └──────────────────────────────────────────────┘
+                            """.formatted(recaudacionTicket,numeroTicket));
 
                             IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
@@ -744,10 +753,13 @@ void main() {
                             }
 
                             IO.println("""
-                                        \nCantidad multas: %d
-                                        Recaudacion total: %.2f €
-                                        """.formatted(numeroMulta, recaudacionMultas));
-
+                            ┌──────────────────────────────────────────────┐
+                            │               INFORME TICKET.                │
+                            ├──────────────────────────────────────────────┤
+                            │  Recaudación Total: %.2f €                   │
+                            │  Número de multas generadas: %d               │
+                            └──────────────────────────────────────────────┘
+                            """.formatted(recaudacionMultas,numeroMulta));
                             IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 3:
