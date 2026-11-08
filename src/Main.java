@@ -118,7 +118,7 @@ void main() {
 
                 if (residente) {
                     if (dineroUsuario >= PRECIO_PRIMER_TRAMO_RESIDENTE && dineroUsuario < PRECIO_SEGUNDO_TRAMO_RESIDENTE) {
-                        //Añadimos con la función .plus los tramos que corresponda al importe introducido.
+                        //Añadimos con la función.plus los tramos que corresponda al importe introducido.
                         tramo = 1;
                     } else if (dineroUsuario >= PRECIO_SEGUNDO_TRAMO_RESIDENTE && dineroUsuario < PRECIO_TERCER_TRAMO_RESIDENTE) {
                         tramo = 2;
@@ -197,6 +197,7 @@ void main() {
                         }
                     } else if (respuestaSimulacion.equalsIgnoreCase("no")) {
                         fechaActual = LocalDateTime.now();
+                        fechaValida = true;
                     } else {
                         IO.println("Opción no valida.");
                     }
@@ -351,17 +352,18 @@ void main() {
                         ║                PARKING                 ║
                         ╠════════════════════════════════════════╣
                         ║ Nº Ticket:                             ║
-                        ║ Emitido:       %s - %tT        ║
+                        ║ Emitido:       %s - %tT   ║
                         ╠════════════════════════════════════════╣
-                        ║ Vencimiento:   %tT             ║
-                        ║ Fecha Vto:     %s            ║
+                        ║ Vencimiento:   %tT                ║
+                        ║ Fecha Vto:     %s              ║
                         ╠════════════════════════════════════════╣
                         ║ Importe:       %.2f €                  ║
-                        ║ Tipo:          No Residente            ║
+                        ║ Tipo:          %s            ║
                         ╠════════════════════════════════════════╣
                         ║ Control Autenticidad: OK               ║
                         ╚════════════════════════════════════════╝
-                        """.formatted(fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario));
+                        """.formatted(fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario,
+                            (respuestaSimulacion.equalsIgnoreCase("si")?"Residente   " : "No residente")));
                 }
 
 
