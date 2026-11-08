@@ -15,8 +15,9 @@ void main() {
     //Portada de nuestro menú
 
     // Variables de nuestro programa.
-    int option, diaSimulacion, mesSimulacion, anioSimulacion, horaSimulacion, minutosSimulacion;
-    double dineroUsuario = 0, importeFinal = 0, horasTramo = 0, minutosTramo = 0, segundosTramo = 0;
+    int option, diaSimulacion, mesSimulacion, anioSimulacion, horaSimulacion, minutosSimulacion, numeroTicket = 0;
+
+    double dineroUsuario = 0, importeFinal = 0, horasTramo = 0, minutosTramo = 0, segundosTramo = 0, recaudacionTicket = 0;
     //Tarifa de precios para los residentes
     final double PRECIO_PRIMER_TRAMO_RESIDENTE = 0.10, PRECIO_SEGUNDO_TRAMO_RESIDENTE = 0.20;
     final double PRECIO_TERCER_TRAMO_RESIDENTE = 0.40, PRECIO_CUARTO_TRAMO_RESIDENTE = 0.60;
@@ -36,7 +37,7 @@ void main() {
     final int HORAS_CUARTO_TRAMO = 1, MINUTOS_CUARTO_TRAMO = 29, SEGUNDOS_CUARTO_TRAMO = 12;
     final int HORAS_QUINTO_TRAMO = 2, MINUTOS_QUINTO_TRAMO = 0, SEGUNDOS_QUINTO_TRAMO = 0;
     boolean salidaMenu, datoValido, dineroValido, residente, fechaValida = false;
-    String datosUsuario, respuestaSimulacion;
+    String datosUsuario, respuestaSimulacion, codigoTicket = "";
     do {
         option = Integer.parseInt(IO.readln("""
                               /\\\\_.-'''-._
@@ -69,6 +70,7 @@ void main() {
                 datoValido = false;
                 dineroValido = false;
                 residente = false;
+                codigoTicket = "";
                 do {
                     // Bloque para validar que el usuario es residente o no.
                     datosUsuario = IO.readln("¿Es usted residente? (S/N): ");
@@ -326,7 +328,7 @@ void main() {
                         }
 
                     }
-                        break;
+                    break;
                     case DayOfWeek.SUNDAY: {
                         //Para los domingos
                         fechaSalida = fechaActual.withHour(9).withMinute(0).withSecond(0);
@@ -336,8 +338,20 @@ void main() {
                         break;
                     }
                 }
-                //Generamos un código.
+                // Recaudamos tanto el dinero como el número de ticket si la fecha es correcta.
+                if (fechaValida) {
+                    recaudacionTicket += dineroUsuario; //Vamos metiendo la recaudación de cada ticket.
+                    numeroTicket++; //Sumamos un ticket.
+                }
 
+                //Generamos un código.
+                if (fechaValida) {
+                    DateTimeFormatter fechaCodigoTicket = DateTimeFormatter.ofPattern("MMdd");
+                    codigoTicket += fechaActual.format(fechaCodigoTicket);
+                    codigoTicket += residente ? "SR" : "NR";
+                    codigoTicket += "MAR";
+                    codigoTicket += String.valueOf(numeroTicket);
+                }
 
 
                 DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -345,27 +359,24 @@ void main() {
                 String fechaTextoVencimiento = fechaSalida.format(fechaFormateada);
                 //TODO crear una variable booleana para imprimir SOLO una fecha valida.
                 // Esto es un tickect orientativo falta actualizar los datos  cuando hay que hacer cambio de días.
-                if(fechaValida){
+                if (fechaValida) {
                     IO.println("""
-                        ╔════════════════════════════════════════╗
-                        ║        ZONA AZUL CIUDAD DE MARTOS      ║
-                        ║                PARKING                 ║
-                        ╠════════════════════════════════════════╣
-                        ║ Nº Ticket:                             ║
-                        ║ Emitido:       %s - %tT   ║
-                        ╠════════════════════════════════════════╣
-                        ║ Vencimiento:   %tT                ║
-                        ║ Fecha Vto:     %s              ║
-                        ╠════════════════════════════════════════╣
-                        ║ Importe:       %.2f €                  ║
-                        ║ Tipo:          %s            ║
-                        ╠════════════════════════════════════════╣
-                        ║ Control Autenticidad: OK               ║
-                        ╚════════════════════════════════════════╝
-                        """.formatted(fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario,
+                            ╔════════════════════════════════════════╗
+                            ║        ZONA AZUL CIUDAD DE MARTOS      ║
+                            ║                PARKING                 ║
+                            ╠════════════════════════════════════════╣
+                            ║ Nº Ticket:     %-12s            ║
+                            ║ Emitido:       %s - %tT   ║
+                            ╠════════════════════════════════════════╣
+                            ║ Vencimiento:   %tT                ║
+                            ║ Fecha Vto:     %s              ║
+                            ╠════════════════════════════════════════╣
+                            ║ Importe:       %.2f €                  ║
+                            ║ Tipo:          %s            ║
+                            ╚════════════════════════════════════════╝
+                            """.formatted(codigoTicket, fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario,
                             (residente) ? "Residente   " : "No residente"));
                 }
-
 
 
                 break;
