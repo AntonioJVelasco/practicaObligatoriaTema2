@@ -363,7 +363,7 @@ void main() {
                         ║ Control Autenticidad: OK               ║
                         ╚════════════════════════════════════════╝
                         """.formatted(fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario,
-                            (respuestaSimulacion.equalsIgnoreCase("si")?"Residente   " : "No residente")));
+                            (residente) ? "Residente   " : "No residente"));
                 }
 
 
