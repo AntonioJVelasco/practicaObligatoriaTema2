@@ -505,7 +505,13 @@ void main() {
 
                                 } while (importeMulta != 3);
 
-                                ticketAnulado = "4321AA"; //TODO aquí deberemos generar un código    1392A2
+                                //Generamos el código de anulacion.
+
+                                for (int i = ticketMulta.length() - 1; i >= 0 ; i--) {
+                                    ticketAnulado += ticketMulta.charAt(i);
+                                }
+                                IO.println("Codigo ticket:" + ticketMulta);
+                                IO.println("Codigo anulado:" + ticketAnulado);
                                 numeroMulta++;
                                 recaudacionMultas += 3;
 
@@ -527,7 +533,6 @@ void main() {
                                 }
 
                             } while (importeMulta != 6);
-                            ticketAnulado = "4321BB"; //TODO aquí deberemos generar un código    1392A2
                             numeroMulta++;
                             recaudacionMultas += 6;
 
