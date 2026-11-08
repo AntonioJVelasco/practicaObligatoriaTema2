@@ -15,9 +15,9 @@ void main() {
     //Portada de nuestro menú
 
     // Variables de nuestro programa.
-    int option, diaSimulacion, mesSimulacion, anioSimulacion, horaSimulacion, minutosSimulacion, numeroTicket = 0;
+    int option, diaSimulacion, mesSimulacion, anioSimulacion, horaSimulacion, minutosSimulacion, numeroTicket = 0, numeroMulta = 0;
 
-    double dineroUsuario = 0, importeFinal = 0, horasTramo = 0, minutosTramo = 0, segundosTramo = 0, recaudacionTicket = 0;
+    double dineroUsuario = 0, importeFinal = 0, horasTramo = 0, minutosTramo = 0, segundosTramo = 0, recaudacionTicket = 0, recaudacionMultas = 0;
     //Tarifa de precios para los residentes
     final double PRECIO_PRIMER_TRAMO_RESIDENTE = 0.10, PRECIO_SEGUNDO_TRAMO_RESIDENTE = 0.20;
     final double PRECIO_TERCER_TRAMO_RESIDENTE = 0.40, PRECIO_CUARTO_TRAMO_RESIDENTE = 0.60;
@@ -411,12 +411,13 @@ void main() {
                 break;
             case 2:
 
-                int opcionMultas; //Variable para las opciones del menu multas
-                String ticketMulta; // numero de ticket a comprobar si es valido.
-                String ticketAnulado; // numero de ticket generado al anular la multa.
-                boolean ticketValido; // ticket válido o no.
-                int cantidadMultas = 0;
-                double recaudacionMultas = 0; //Podria ser entero para esta práctica. Pero en un futuro si cambian los precios, podriamos necesitar un double.
+                int opcionMultas, importeMulta = 0; //Variable para las opciones del menu multas
+                String ticketMulta =""; // numero de ticket a comprobar si es valido.
+                String ticketAnulado = ""; // numero de ticket generado al anular la multa.
+                boolean ticketValido = true; // ticket válido o no.
+                LocalDateTime fechaMulta = LocalDateTime.now();
+                DateTimeFormatter fechaMultaFormateada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String fechaMultaTexto = fechaMulta.format(fechaMultaFormateada);
 
                 //Limpiamos la pantalla
                 for (int i = 0; i < 30; i++) {
@@ -440,35 +441,76 @@ void main() {
                             👉 Elija una opción:"""));
                     switch (opcionMultas) {
                         case 1: //Anular multa por exceso de tiempo permitido
+                            int diaMulta, mesMulta;
+                            ticketValido = true;
 
                             //Limpiamos la pantalla
                             for (int i = 0; i < 30; i++) {
                                 IO.println();
                             }
 
+                            //Pedimos el numero de ticket y comprobamos si es valido
                             ticketMulta = IO.readln("Introduce el número del ticket: ");
 
-                            //Comprobamos si es valido
-                            if (ticketMulta.equals("1234")) //TODO aquí deberemos comprobar un código
-                                ticketValido = true;
-                            else
+                            //Comprobamos la longitud (minimo 10)
+                            if (ticketMulta.length() < 10) {
                                 ticketValido = false;
+                            } else {
+                                //Comprobamos que los 4 primeros numeros sean digitos
+                                for (int i = 0; i < 4; i++) {
+                                    if (!Character.isDigit(ticketMulta.charAt(i))) {
+                                        ticketValido = false;
+                                        break;
+                                    }
+                                }
 
+                                //Comprobamos que sea una fecha válida
+                                if (ticketValido) { //Pongo condicion para que solo haga esto si previamente ha detectado 4 digitos.
+                                    mesMulta = Integer.parseInt(ticketMulta.substring(0,2));
+                                    diaMulta = Integer.parseInt(ticketMulta.substring(2,4));
+                                    try {
+                                        MonthDay.of(mesMulta,diaMulta);
+                                    } catch (DateTimeException e) {
+                                        ticketValido = false;
+                                    }
+                                }
+
+                                //Comprobamos las posiciones 4 y 5 (SR o NR)
+                                //if (!ticketMulta.startsWith("SR", 4) && !ticketMulta.startsWith("NR", 4)) ticketValido = false;
+                                if (!ticketMulta.substring(4,6).equals("SR") && !ticketMulta.substring(4,6).equals("NR")) ticketValido = false;
+
+                                //Comprobamos las posiciones 4 y 5 (SR o NR)
+                                if (!ticketMulta.substring(6,9).equals("MAR")) ticketValido = false;
+
+                                //Comprobamos que no haya un 0 en la posicion 9
+                                if (ticketMulta.charAt(9) == '0') ticketValido = false;
+
+                                //Comprobamos que los últimos numeros sean digitos
+                                for (int i = 9; i < ticketMulta.length(); i++) {
+                                    if (!Character.isDigit(ticketMulta.charAt(i))) {
+                                        ticketValido = false;
+                                        break;
+                                    }
+                                }
+
+                            }
                             //Anulamos la multa y generamos ticket de anulación si es valido el ticket.
                             if (ticketValido) {
-                                IO.readln("Ticket correcto. Ingrese 3 € y pulse -Enter- para continuar.");
-                                ticketAnulado = "4321AA"; //TODO aquí deberemos generar un código
-                                IO.println("Tu ticket de anulación es: %s".formatted(ticketAnulado));
-                                cantidadMultas++;
+                                IO.println("El ticket correcto. ");
+                                do {
+                                    importeMulta = Integer.parseInt(IO.readln("Ingrese 3 € para anular la multa: "));
+                                    if (importeMulta < 3) {
+                                        IO.println("Importe insuficiente.");
+                                    }
+
+                                } while (importeMulta < 3);
+
+                                ticketAnulado = "4321AA"; //TODO aquí deberemos generar un código    1392A2
+                                numeroMulta++;
                                 recaudacionMultas += 3;
-                                IO.println("""
-                                        \nCantidad multas: %d
-                                        Recaudacion total: %.2f
-                                        """.formatted(cantidadMultas, recaudacionMultas));
+
                             } else
                                 IO.println("%s no es un ticket válido. No se ha anulado ninguna multa.".formatted(ticketMulta));
-
-                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
 
                             break;
                         case 2: //Anular multa por carecer de ticket
@@ -478,17 +520,59 @@ void main() {
                                 IO.println();
                             }
 
-                            IO.println("Has seleccionado anular multa por carecer de ticket");
+                            do {
+                                importeMulta = Integer.parseInt(IO.readln("Ingrese 6 € para anular la multa: "));
+                                if (importeMulta < 6) {
+                                    IO.println("Importe insuficiente.");
+                                }
 
-                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+                            } while (importeMulta < 6);
+                            ticketAnulado = "4321BB"; //TODO aquí deberemos generar un código    1392A2
+                            numeroMulta++;
+                            recaudacionMultas += 6;
+
                             break;
                         case 0: //Volver al menu principal
+                            ticketValido = false;
                             break;
                         default:
-
+                            ticketValido = false;
                             IO.println("Opción introducido no valida.");
                             break;
                     }
+                    if (ticketValido) {
+                        //Limpiamos la pantalla
+                        for (int i = 0; i < 30; i++) {
+                            IO.println();
+                        }
+
+                        //Creamos el efecto de estar generando el ticket.
+                        IO.print("Generando ticket");
+                        for (int i = 0; i <= 2; i++) {
+                            IO.print(".");
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        IO.println();
+                        //Imprimimos el ticket
+                        IO.println("""
+                            ╔════════════════════════════════════════╗
+                            ║        ZONA AZUL CIUDAD DE MARTOS      ║
+                            ║                PARKING                 ║
+                            ╠════════════════════════════════════════╣
+                            ║ Ticket multa:     %-12s         ║
+                            ║ Fecha:            %s           ║
+                            ╠════════════════════════════════════════╣
+                            ║ Importe:          %s €                  ║
+                            ║ Tipo:             %-12s     ║
+                            ╚════════════════════════════════════════╝
+                            """.formatted(ticketAnulado,fechaMultaTexto,(opcionMultas == 1 ? "3" : "6"),(opcionMultas == 1 ? "Exceso de tiempo" : "Carecer de ticket")));
+                    }
+
+                    IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                 } while (opcionMultas != 0);
 
                 break;
@@ -659,7 +743,10 @@ void main() {
                                 IO.println();
                             }
 
-                            IO.println("Opción no implementada");
+                            IO.println("""
+                                        \nCantidad multas: %d
+                                        Recaudacion total: %.2f €
+                                        """.formatted(numeroMulta, recaudacionMultas));
 
                             IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
