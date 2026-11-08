@@ -39,6 +39,10 @@ void main() {
     boolean salidaMenu, datoValido, dineroValido, residente, fechaValida = false;
     String datosUsuario, respuestaSimulacion, codigoTicket = "";
     do {
+        //Limpiamos la pantalla
+        for (int i = 0; i < 30; i++) {
+            IO.println();
+        }
         option = Integer.parseInt(IO.readln("""
                               /\\\\_.-'''-._
                             _/           \\\\_
@@ -71,6 +75,12 @@ void main() {
                 dineroValido = false;
                 residente = false;
                 codigoTicket = "";
+
+                //Limpiamos la pantalla
+                for (int i = 0; i < 30; i++) {
+                    IO.println();
+                }
+
                 do {
                     // Bloque para validar que el usuario es residente o no.
                     datosUsuario = IO.readln("¿Es usted residente? (S/N): ");
@@ -359,7 +369,25 @@ void main() {
                 String fechaTextoVencimiento = fechaSalida.format(fechaFormateada);
                 //TODO crear una variable booleana para imprimir SOLO una fecha valida.
                 // Esto es un tickect orientativo falta actualizar los datos  cuando hay que hacer cambio de días.
+
+                //Limpiamos la pantalla
+                for (int i = 0; i < 30; i++) {
+                    IO.println();
+                }
+
                 if (fechaValida) {
+                    //Creamos el efecto de estar generando el ticket.
+                    IO.print("Generando ticket");
+                    for (int i = 0; i <= 2; i++) {
+                        IO.print(".");
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    IO.println();
+                    //Imprimimos el ticket
                     IO.println("""
                             ╔════════════════════════════════════════╗
                             ║        ZONA AZUL CIUDAD DE MARTOS      ║
@@ -377,6 +405,7 @@ void main() {
                             """.formatted(codigoTicket, fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario,
                             (residente) ? "Residente   " : "No residente"));
                 }
+                IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
 
 
                 break;
@@ -389,7 +418,17 @@ void main() {
                 int cantidadMultas = 0;
                 double recaudacionMultas = 0; //Podria ser entero para esta práctica. Pero en un futuro si cambian los precios, podriamos necesitar un double.
 
+                //Limpiamos la pantalla
+                for (int i = 0; i < 30; i++) {
+                    IO.println();
+                }
+
                 do {
+
+                    for (int i = 0; i < 30; i++) {
+                        IO.println();
+                    }
+
                     opcionMultas = Integer.parseInt(IO.readln("""
                               ┌──────────────────────────────────────────────────┐
                               │                  ANULAR MULTA                    │
@@ -401,6 +440,12 @@ void main() {
                             👉 Elija una opción:"""));
                     switch (opcionMultas) {
                         case 1: //Anular multa por exceso de tiempo permitido
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             ticketMulta = IO.readln("Introduce el número del ticket: ");
 
                             //Comprobamos si es valido
@@ -423,13 +468,24 @@ void main() {
                             } else
                                 IO.println("%s no es un ticket válido. No se ha anulado ninguna multa.".formatted(ticketMulta));
 
+                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+
                             break;
                         case 2: //Anular multa por carecer de ticket
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             IO.println("Has seleccionado anular multa por carecer de ticket");
+
+                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 0: //Volver al menu principal
                             break;
                         default:
+
                             IO.println("Opción introducido no valida.");
                             break;
                     }
@@ -439,7 +495,18 @@ void main() {
             case 3:
 
                 int opcionConsultas; //Variable para las opciones del menu consultas.
+
+                //Limpiamos la pantalla
+                for (int i = 0; i < 30; i++) {
+                    IO.println();
+                }
+
                 do { //Creamos un menú para visualizar las distintas opciones
+
+                    for (int i = 0; i < 30; i++) {
+                        IO.println();
+                    }
+
                     opcionConsultas = Integer.parseInt(IO.readln("""
                               ┌──────────────────────────────────────────────────┐
                               │                  MENÚ CONSULTAS                  │
@@ -465,6 +532,12 @@ void main() {
                             // 1. Preparamos solo los datos (manteniendo los ceros a la izquierda para el formato)
                             String valorFecha = "%s - %02d/%02d/%d".formatted(diaSemana, dia, mes, anio);
                             String valorHora = "%02d:%02d:%02d".formatted(hora, minuto, segundo);
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             // 2. Imprimimos la tabla:
                             IO.println("""
                                       ┌──────────────────────────────────────────────────┐
@@ -474,9 +547,16 @@ void main() {
                                       │ Hora     │ %-37s │
                                       └──────────┴───────────────────────────────────────┘
                                     """.formatted(valorFecha, valorHora));
+                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
 
                             break;
                         case 2: //Mostrar tarifa
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             IO.println("""
                                       ┌───────────────────────────────────────────────┐
                                       │               TARIFAS ZONA AZUL               │
@@ -490,8 +570,15 @@ void main() {
                                       │    02:00:00    │      1,70 €     │   0,80 €   │
                                       └────────────────┴─────────────────┴────────────┘
                                     """);
+                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 3: //Mostrar horarios
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             IO.println("""
                                       ┌──────────────────────────────────────────────────┐
                                       │                HORARIO ZONA AZUL                 │
@@ -500,11 +587,12 @@ void main() {
                                       │ Sábado           │ 09:00 - 14:00                 │
                                       └──────────────────┴───────────────────────────────┘
                                     """);
+                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 0: //Volver al menú principal
                             break;
                         default:
-                            IO.println("Opción introducido no valida.");
+                            IO.println("Opción introducida no valida.");
                     }
                 } while (opcionConsultas != 0);
 
@@ -514,6 +602,11 @@ void main() {
                 String usuario = "Root";
                 int contrasenia = 1234;
                 boolean loggin = false;
+
+                //Limpiamos la pantalla
+                for (int i = 0; i < 30; i++) {
+                    IO.println();
+                }
 
                 //Validación del usuario y contraseña.
 
@@ -531,6 +624,12 @@ void main() {
                 }
                 int opcionAdministrador = 0;
                 do {
+
+                    //Limpiamos la pantalla
+                    for (int i = 0; i < 30; i++) {
+                        IO.println();
+                    }
+
                     opcionAdministrador = Integer.parseInt(IO.readln("""
                             ┌──────────────────────────────────────────────┐
                             │           MENÚ DE ADMINISTRADOR              │
@@ -543,12 +642,34 @@ void main() {
                             👉 Elige una opción:"""));
                     switch (opcionAdministrador) {
                         case 1:
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             IO.println("Opción no implementada");
+
+                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 2:
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             IO.println("Opción no implementada");
+
+                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 3:
+
+                            //Limpiamos la pantalla
+                            for (int i = 0; i < 30; i++) {
+                                IO.println();
+                            }
+
                             IO.println("""
                                     Saliendo de la aplicación.
                                     ¡¡¡Vuelva pronto!!!
