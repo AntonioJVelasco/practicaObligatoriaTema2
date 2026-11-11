@@ -99,8 +99,8 @@ void main() {
                     dineroUsuario = Double.parseDouble(IO.readln("""
                             Introduce el importe.
                             Máximo 2 euros.
-                            Mínimo 0.10 (Si eres residente), 0.25 (si no eres residente)
-                            """));
+                            Mínimo %s
+                            """.formatted((residente ? "0.10 euros." : "0.25 euros."))));
                     if (!residente) {
                         /*
                         Controlamos que los no residentes no metan menos de 0.25 y que no pueda meter la tarifa más
@@ -157,7 +157,7 @@ void main() {
                         tramo = 5;
                     }
                 }
-                //todo asignar los valores de los tramos a las nuevas Variables.
+
                 // Una vez que conocemos el tramo unificamos las variables de horas minutos segundos.
                 switch (tramo) {
                     case 1:
@@ -197,7 +197,7 @@ void main() {
                         anioSimulacion = Integer.parseInt(IO.readln("Introduce el año: "));
                         mesSimulacion = Integer.parseInt(IO.readln("Introduce el mes: "));
                         diaSimulacion = Integer.parseInt(IO.readln("Introduce el día: "));
-                        horaSimulacion = Integer.parseInt(IO.readln("Introduce  la hora: "));
+                        horaSimulacion = Integer.parseInt(IO.readln("Introduce la hora: "));
                         minutosSimulacion = Integer.parseInt(IO.readln("Introduce los minutos: "));
                         try {
                             fechaSimulada = LocalDateTime.of(anioSimulacion, mesSimulacion, diaSimulacion, horaSimulacion, minutosSimulacion);
@@ -367,8 +367,6 @@ void main() {
                 DateTimeFormatter fechaFormateada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 String fechaTextoEmitido = fechaActual.format(fechaFormateada);
                 String fechaTextoVencimiento = fechaSalida.format(fechaFormateada);
-                //TODO crear una variable booleana para imprimir SOLO una fecha valida.
-                // Esto es un tickect orientativo falta actualizar los datos  cuando hay que hacer cambio de días.
 
                 //Limpiamos la pantalla
                 for (int i = 0; i < 30; i++) {
@@ -393,16 +391,18 @@ void main() {
                             ║        ZONA AZUL CIUDAD DE MARTOS      ║
                             ║                PARKING                 ║
                             ╠════════════════════════════════════════╣
-                            ║ Nº Ticket:     %-12s            ║
-                            ║ Emitido:       %s - %tT   ║
+                            ║ Nº Ticket:     %-13s           ║
                             ╠════════════════════════════════════════╣
-                            ║ Vencimiento:   %tT                ║
-                            ║ Fecha Vto:     %s              ║
+                            ║ Emitido:       %s              ║
+                            ║ Hora:          %tT                ║
+                            ╠════════════════════════════════════════╣
+                            ║ Vencimiento:   %s              ║
+                            ║ Hora:          %tT                ║
                             ╠════════════════════════════════════════╣
                             ║ Importe:       %.2f €                  ║
                             ║ Tipo:          %s            ║
                             ╚════════════════════════════════════════╝
-                            """.formatted(codigoTicket, fechaTextoEmitido, fechaActual, fechaSalida, fechaTextoVencimiento, dineroUsuario,
+                            """.formatted(codigoTicket, fechaTextoEmitido, fechaActual, fechaTextoVencimiento, fechaSalida, dineroUsuario,
                             (residente) ? "Residente   " : "No residente"));
                 }
                 IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
@@ -412,7 +412,7 @@ void main() {
             case 2:
 
                 int opcionMultas, importeMulta = 0; //Variable para las opciones del menu multas
-                String ticketMulta =""; // numero de ticket a comprobar si es valido.
+                String ticketMulta = ""; // numero de ticket a comprobar si es valido.
                 String ticketAnulado = ""; // numero de ticket generado al anular la multa.
                 boolean ticketValido = true; // ticket válido o no.
                 LocalDateTime fechaMulta = LocalDateTime.now();
@@ -466,10 +466,10 @@ void main() {
 
                                 //Comprobamos que sea una fecha válida
                                 if (ticketValido) { //Pongo condicion para que solo haga esto si previamente ha detectado 4 digitos.
-                                    mesMulta = Integer.parseInt(ticketMulta.substring(0,2));
-                                    diaMulta = Integer.parseInt(ticketMulta.substring(2,4));
+                                    mesMulta = Integer.parseInt(ticketMulta.substring(0, 2));
+                                    diaMulta = Integer.parseInt(ticketMulta.substring(2, 4));
                                     try {
-                                        MonthDay.of(mesMulta,diaMulta);
+                                        MonthDay.of(mesMulta, diaMulta);
                                     } catch (DateTimeException e) {
                                         ticketValido = false;
                                     }
@@ -477,10 +477,11 @@ void main() {
 
                                 //Comprobamos las posiciones 4 y 5 (SR o NR)
                                 //if (!ticketMulta.startsWith("SR", 4) && !ticketMulta.startsWith("NR", 4)) ticketValido = false;
-                                if (!ticketMulta.substring(4,6).equals("SR") && !ticketMulta.substring(4,6).equals("NR")) ticketValido = false;
+                                if (!ticketMulta.substring(4, 6).equals("SR") && !ticketMulta.substring(4, 6).equals("NR"))
+                                    ticketValido = false;
 
                                 //Comprobamos las posiciones 4 y 5 (SR o NR)
-                                if (!ticketMulta.substring(6,9).equals("MAR")) ticketValido = false;
+                                if (!ticketMulta.substring(6, 9).equals("MAR")) ticketValido = false;
 
                                 //Comprobamos que no haya un 0 en la posicion 9
                                 if (ticketMulta.charAt(9) == '0') ticketValido = false;
@@ -496,22 +497,22 @@ void main() {
                             }
                             //Anulamos la multa y generamos ticket de anulación si es valido el ticket.
                             if (ticketValido) {
-                                IO.println("El ticket correcto. ");
+                                IO.println("El ticket introducido es correcto. ");
                                 do {
                                     importeMulta = Integer.parseInt(IO.readln("Ingrese 3 € para anular la multa: "));
                                     if (importeMulta != 3) {
-                                        IO.println("Importe insuficiente.");
+                                        IO.println("Importe erroneo.");
                                     }
 
                                 } while (importeMulta != 3);
 
                                 //Generamos el código de anulacion.
-
-                                for (int i = ticketMulta.length() - 1; i >= 0 ; i--) {
+                                ticketAnulado = "";
+                                for (int i = ticketMulta.length() - 1; i >= 0; i--) {
                                     ticketAnulado += ticketMulta.charAt(i);
                                 }
-                                IO.println("Codigo ticket:" + ticketMulta);
-                                IO.println("Codigo anulado:" + ticketAnulado);
+
+                                //Actualizamos el contador y la recaudación
                                 numeroMulta++;
                                 recaudacionMultas += 3;
 
@@ -529,10 +530,25 @@ void main() {
                             do {
                                 importeMulta = Integer.parseInt(IO.readln("Ingrese 6 € para anular la multa: "));
                                 if (importeMulta != 6) {
-                                    IO.println("Importe Erroneo.");
+                                    IO.println("Importe erroneo.");
                                 }
 
                             } while (importeMulta != 6);
+
+                            //Generamos el código de anulacion.
+                            ticketAnulado = "";
+
+                            //Generamo 5 numeros aleatorios
+                            for (int i = 0; i < 5; i++) {
+                                ticketAnulado += (int) (Math.random() * 10);
+                            }
+
+                            //Añadimos 'MAR'
+                            ticketAnulado += "MAR";
+                            //Añadimos el contador actual de multas + 1
+                            ticketAnulado += numeroMulta + 1;
+
+                            //Actualizamos el contador y la recaudación
                             numeroMulta++;
                             recaudacionMultas += 6;
 
@@ -564,20 +580,21 @@ void main() {
                         IO.println();
                         //Imprimimos el ticket
                         IO.println("""
-                            ╔════════════════════════════════════════╗
-                            ║        ZONA AZUL CIUDAD DE MARTOS      ║
-                            ║                PARKING                 ║
-                            ╠════════════════════════════════════════╣
-                            ║ Ticket multa:     %-12s         ║
-                            ║ Fecha:            %s           ║
-                            ╠════════════════════════════════════════╣
-                            ║ Importe:          %s €                  ║
-                            ║ Tipo:             %-12s     ║
-                            ╚════════════════════════════════════════╝
-                            """.formatted(ticketAnulado,fechaMultaTexto,(opcionMultas == 1 ? "3" : "6"),(opcionMultas == 1 ? "Exceso de tiempo" : "Carecer de ticket")));
+                                ╔════════════════════════════════════════╗
+                                ║        ZONA AZUL CIUDAD DE MARTOS      ║
+                                ║                PARKING                 ║
+                                ╠════════════════════════════════════════╣
+                                ║ Ticket multa:    %-21s ║
+                                ║ Fecha:           %s            ║
+                                ╠════════════════════════════════════════╣
+                                ║ Importe:         %s €                   ║
+                                ║ Tipo:            %-21s ║
+                                ╚════════════════════════════════════════╝
+                                """.formatted(ticketAnulado, fechaMultaTexto, (opcionMultas == 1 ? "3" : "6"), (opcionMultas == 1 ? "Exceso de tiempo" : "Carecer de ticket")));
+                        IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
                     }
 
-                    IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+
                 } while (opcionMultas != 0);
 
                 break;
@@ -636,7 +653,7 @@ void main() {
                                       │ Hora     │ %-37s │
                                       └──────────┴───────────────────────────────────────┘
                                     """.formatted(valorFecha, valorHora));
-                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+                            IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
 
                             break;
                         case 2: //Mostrar tarifa
@@ -659,7 +676,7 @@ void main() {
                                       │    02:00:00    │      1,70 €     │   0,80 €   │
                                       └────────────────┴─────────────────┴────────────┘
                                     """);
-                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+                            IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 3: //Mostrar horarios
 
@@ -669,14 +686,16 @@ void main() {
                             }
 
                             IO.println("""
-                                      ┌──────────────────────────────────────────────────┐
-                                      │                HORARIO ZONA AZUL                 │
-                                      ├──────────────────┬───────────────────────────────┤
-                                      │ Lunes a viernes  │ 09:00 - 14:00 y 17:00 - 21:00 │
-                                      │ Sábado           │ 09:00 - 14:00                 │
-                                      └──────────────────┴───────────────────────────────┘
+                                      ┌─────────────────────────────────────────────┐
+                                      │              HORARIO ZONA AZUL              │
+                                      ├─────────────────┬─────────────┬─────────────┤
+                                      │ Día             │    Mañana   │    Tarde    │
+                                      ├─────────────────┼─────────────┼─────────────┤
+                                      │ Lunes a viernes │ 09:00-14:00 │ 17:00-21:00 │
+                                      │ Sábado          │ 09:00-14:00 │      -      │
+                                      └─────────────────┴─────────────┴─────────────┘
                                     """);
-                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+                            IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 0: //Volver al menú principal
                             break;
@@ -726,7 +745,7 @@ void main() {
                             │  1. Dinero ingresado en tickets y generados  │
                             │  2. Dinero por multas y multas anuladas      │
                             │  3. Apagar el software.                      │
-                            │  4. Volver al menú Inicial.                  │
+                            │  0. Volver al menú Inicial.                  │
                             └──────────────────────────────────────────────┘
                             👉 Elige una opción:"""));
                     switch (opcionAdministrador) {
@@ -738,17 +757,16 @@ void main() {
                             }
 
 
-
                             IO.println("""
-                            ┌──────────────────────────────────────────────┐
-                            │               INFORME TICKET.                │
-                            ├──────────────────────────────────────────────┤
-                            │  Recaudación Total: %.2f €                   │
-                            │  Número de tickets generados: %d              │
-                            └──────────────────────────────────────────────┘
-                            """.formatted(recaudacionTicket,numeroTicket));
+                                    ┌──────────────────────────────────────────────┐
+                                    │               INFORME TICKETn                │
+                                    ├──────────────────────────────────────────────┤
+                                    │  Recaudación Total: %5.1f €                  │
+                                    │  Número de tickets generados: %-3d            │
+                                    └──────────────────────────────────────────────┘
+                                    """.formatted(recaudacionTicket, numeroTicket));
 
-                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+                            IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 2:
 
@@ -758,14 +776,14 @@ void main() {
                             }
 
                             IO.println("""
-                            ┌──────────────────────────────────────────────┐
-                            │               INFORME TICKET.                │
-                            ├──────────────────────────────────────────────┤
-                            │  Recaudación Total: %.2f €                   │
-                            │  Número de multas generadas: %d               │
-                            └──────────────────────────────────────────────┘
-                            """.formatted(recaudacionMultas,numeroMulta));
-                            IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+                                    ┌──────────────────────────────────────────────┐
+                                    │               INFORME TICKET                 │
+                                    ├──────────────────────────────────────────────┤
+                                    │  Recaudación Total: %5.1f €                  │
+                                    │  Número de multas generadas: %-3d             │
+                                    └──────────────────────────────────────────────┘
+                                    """.formatted(recaudacionMultas, numeroMulta));
+                            IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
                             break;
                         case 3:
 
@@ -779,11 +797,11 @@ void main() {
                                     ¡¡¡Vuelva pronto!!!
                                     """);
                             salidaMenu = true;
+                            break;
+                        default:
+                            IO.println("Opción introducido no valida.");
                     }
-                } while (opcionAdministrador != 4 && opcionAdministrador != 3);
-                break;
-            default:
-                IO.println("Opción introducido no valida.");
+                } while (opcionAdministrador != 0 && opcionAdministrador != 3);
         }
     }
     while (!salidaMenu);
