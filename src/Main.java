@@ -516,8 +516,10 @@ void main() {
                                 numeroMulta++;
                                 recaudacionMultas += 3;
 
-                            } else
+                            } else {
                                 IO.println("%s no es un ticket válido. No se ha anulado ninguna multa.".formatted(ticketMulta));
+                                IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
+                            }
 
                             break;
                         case 2: //Anular multa por carecer de ticket
@@ -591,7 +593,7 @@ void main() {
                                 ║ Tipo:            %-21s ║
                                 ╚════════════════════════════════════════╝
                                 """.formatted(ticketAnulado, fechaMultaTexto, (opcionMultas == 1 ? "3" : "6"), (opcionMultas == 1 ? "Exceso de tiempo" : "Carecer de ticket")));
-                        IO.readln("Pulsa enter para volver al menú."); //Esperamos a que el usuario pulse enter para continuar
+                        IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
                     }
 
 
@@ -759,7 +761,7 @@ void main() {
 
                             IO.println("""
                                     ┌──────────────────────────────────────────────┐
-                                    │               INFORME TICKETn                │
+                                    │               INFORME TICKET                 │
                                     ├──────────────────────────────────────────────┤
                                     │  Recaudación Total: %5.1f €                  │
                                     │  Número de tickets generados: %-3d            │
