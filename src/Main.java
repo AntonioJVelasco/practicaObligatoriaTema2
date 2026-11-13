@@ -536,6 +536,7 @@ void main() {
                             //Actualizamos el contador y la recaudación
                             numeroMulta++;
                             recaudacionMultas += 6;
+                            ticketValido = true;
 
                             break;
                         case 0: //Volver al menu principal
@@ -543,7 +544,7 @@ void main() {
                             break;
                         default:
                             ticketValido = false;
-                            IO.println("Opción introducido no valida.");
+                            IO.println("Opción introducida no valida.");
                             break;
                     }
                     if (ticketValido) {
