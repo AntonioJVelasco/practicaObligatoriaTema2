@@ -783,9 +783,13 @@ void main() {
                             salidaMenu = true;
                             break;
                         default:
-                            IO.println("Opción introducido no valida.");
+                            IO.println("Opción introducida no válida.");
                     }
                 } while (opcionAdministrador != 0 && opcionAdministrador != 3);
+
+            default:
+                IO.println("Opción introducida no válida.");
+                IO.readln("Pulsa enter para volver al menú. ");
         }
     }
     while (!salidaMenu);
