@@ -463,7 +463,7 @@ void main() {
                                 if (!ticketMulta.substring(4, 6).equals("SR") && !ticketMulta.substring(4, 6).equals("NR"))
                                     ticketValido = false;
 
-                                //Comprobamos las posiciones 4 y 5 (SR o NR)
+                                //Comprobamos las posiciones 6,7 y 8 (MAR)
                                 if (!ticketMulta.substring(6, 9).equals("MAR")) ticketValido = false;
 
                                 //Comprobamos que no haya un 0 en la posicion 9
@@ -727,7 +727,7 @@ void main() {
                             ┌──────────────────────────────────────────────┐
                             │           MENÚ DE ADMINISTRADOR              │
                             ├──────────────────────────────────────────────┤
-                            │  1. Dinero ingresado en tickets y generados  │
+                            │  1. Dinero en tickets y tickets generados    │
                             │  2. Dinero por multas y multas anuladas      │
                             │  3. Apagar el software.                      │
                             │  0. Volver al menú Inicial.                  │
@@ -762,7 +762,7 @@ void main() {
 
                             IO.println("""
                                     ┌──────────────────────────────────────────────┐
-                                    │               INFORME TICKET                 │
+                                    │               INFORME MULTAS                 │
                                     ├──────────────────────────────────────────────┤
                                     │  Recaudación Total: %5.1f €                  │
                                     │  Número de multas generadas: %-3d             │
