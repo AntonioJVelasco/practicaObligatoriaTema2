@@ -1,16 +1,8 @@
 //importamos herramientas para trabajar con fecha y hora.
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 void main() {
-    //Creación del proyecto en git, creacción del directorio src y del main.
-    // Comandos para trabajar en git.
-    /*
-     * git add para preparar los cambios
-     * git commit -m "Mensaje con los cambios hechos"
-     * git push para subirlos a GitHub
-     * */
 
     //Portada de nuestro menú
 
@@ -130,7 +122,6 @@ void main() {
 
                 if (residente) {
                     if (dineroUsuario >= PRECIO_PRIMER_TRAMO_RESIDENTE && dineroUsuario < PRECIO_SEGUNDO_TRAMO_RESIDENTE) {
-                        //Añadimos con la función.plus los tramos que corresponda al importe introducido.
                         tramo = 1;
                     } else if (dineroUsuario >= PRECIO_SEGUNDO_TRAMO_RESIDENTE && dineroUsuario < PRECIO_TERCER_TRAMO_RESIDENTE) {
                         tramo = 2;
@@ -165,12 +156,10 @@ void main() {
                         minutosTramo = MINUTOS_PRIMER_TRAMO;
                         segundosTramo = SEGUNDOS_PRIMER_TRAMO;
                         break;
-
                     case 2:
                         horasTramo = HORAS_SEGUNDO_TRAMO;
                         minutosTramo = MINUTOS_SEGUNDO_TRAMO;
                         segundosTramo = SEGUNDOS_SEGUNDO_TRAMO;
-
                         break;
                     case 3:
                         horasTramo = HORAS_TERCER_TRAMO;
@@ -282,8 +271,6 @@ void main() {
 
                                 //Le añadimos el tiempo restante.
                                 fechaSalida = fechaSalida.plus(tiempoRestante);
-
-
                             }
                         }
                         //Tramo 21 hacia adelante.
@@ -294,7 +281,6 @@ void main() {
 
                             fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
                         }
-
 
                         break;
                     case DayOfWeek.SATURDAY: {
@@ -325,9 +311,7 @@ void main() {
                                 //Le añadimos el tiempo restante.
                                 fechaSalida = fechaSalida.plus(tiempoRestante);
 
-
                             }
-
                         }
                         //Tramo desde las 2 hacia adelante.
                         if (fechaActual.getHour() >= 14) {
@@ -336,7 +320,6 @@ void main() {
 
                             fechaSalida = fechaSalida.plusHours((long) horasTramo).plusMinutes((long) minutosTramo).plusSeconds((long) segundosTramo);
                         }
-
                     }
                     break;
                     case DayOfWeek.SUNDAY: {
@@ -409,7 +392,7 @@ void main() {
 
 
                 break;
-            case 2:
+            case 2: //Opcion para anular multas
 
                 int opcionMultas, importeMulta = 0; //Variable para las opciones del menu multas
                 String ticketMulta = ""; // numero de ticket a comprobar si es valido.
@@ -596,11 +579,10 @@ void main() {
                         IO.readln("Pulsa enter para volver atrás. "); //Esperamos a que el usuario pulse enter para continuar
                     }
 
-
                 } while (opcionMultas != 0);
 
                 break;
-            case 3:
+            case 3: //Menu consultas
 
                 int opcionConsultas; //Variable para las opciones del menu consultas.
 
@@ -629,7 +611,7 @@ void main() {
                         case 1: //Mostrar fecha y hora actual
                             //Variables para la muestra de datos de fecha y hora
                             LocalDateTime ahora = LocalDateTime.now(); //registramos la fecha en el momento que pulsa esta opción del menú
-                            String diaSemana = String.valueOf(ahora.getDayOfWeek()); //Dia de la semana. Ahora mismo lo imprime en inglés.
+                            String diaSemana = ahora.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.of("es")); //Dia de la semana.
                             int dia = ahora.getDayOfMonth(); //Día del mes
                             int mes = ahora.getMonthValue(); //Mes del año
                             int anio = ahora.getYear(); //Año
@@ -707,7 +689,7 @@ void main() {
                 } while (opcionConsultas != 0);
 
                 break;
-            case 4:
+            case 4: //Menu administrador
                 //Variables para el login del menú Administrador
                 String usuario = "Root";
                 int contrasenia = 1234;
