@@ -96,7 +96,7 @@ void main() {
                     if (!residente) {
                         /*
                         Controlamos que los no residentes no metan menos de 0.25 y que no pueda meter la tarifa más
-                        baja de los residentes y vicerversa.
+                        baja de los residentes y viceversa.
                          */
 
                         if (dineroUsuario > 2 || dineroUsuario < 0.25) {
@@ -131,7 +131,7 @@ void main() {
                         tramo = 4;
                     } else {
                         // Cuando llegamos aquí es que el importe es superior al tramo máximo y le damos la máxima
-                        //Duración  en el parking
+                        //Duración en el parking
                         tramo = 5;
                     }
                 } else {
@@ -334,7 +334,7 @@ void main() {
                 // Recaudamos tanto el dinero como el número de ticket si la fecha es correcta.
                 if (fechaValida) {
                     recaudacionTicket += dineroUsuario; //Vamos metiendo la recaudación de cada ticket.
-                    numeroTicket++; //Sumamos un ticket.
+                    numeroTicket++; //sumamos un ticket.
                 }
 
                 //Generamos un código.
@@ -392,7 +392,7 @@ void main() {
 
 
                 break;
-            case 2: //Opcion para anular multas
+            case 2: //Opción para anular multas
 
                 int opcionMultas, importeMulta = 0; //Variable para las opciones del menu multas
                 String ticketMulta = ""; // numero de ticket a comprobar si es valido.
@@ -432,7 +432,7 @@ void main() {
                                 IO.println();
                             }
 
-                            //Pedimos el numero de ticket y comprobamos si es valido
+                            //Pedimos el número de ticket y comprobamos si es válido
                             ticketMulta = IO.readln("Introduce el número del ticket: ");
 
                             //Comprobamos la longitud (minimo 10)
@@ -459,7 +459,7 @@ void main() {
                                 }
 
                                 //Comprobamos las posiciones 4 y 5 (SR o NR)
-                                //if (!ticketMulta.startsWith("SR", 4) && !ticketMulta.startsWith("NR", 4)) ticketValido = false;
+
                                 if (!ticketMulta.substring(4, 6).equals("SR") && !ticketMulta.substring(4, 6).equals("NR"))
                                     ticketValido = false;
 
@@ -710,9 +710,7 @@ void main() {
                         IO.println("Acceso correcto");
                         loggin = true;//Salida de nuestro bucle por loguearse.
                     } else {
-
                         IO.println("Usuario o contraseña no valida.");
-
                     }
                 }
                 int opcionAdministrador = 0;
@@ -787,7 +785,7 @@ void main() {
                             IO.println("Opción introducida no válida.");
                     }
                 } while (opcionAdministrador != 0 && opcionAdministrador != 3);
-
+                break;
             default:
                 IO.println("Opción introducida no válida.");
                 IO.readln("Pulsa enter para volver al menú. ");
